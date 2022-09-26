@@ -2342,7 +2342,7 @@ CONFIG_udev-extraconf=y
 #
 # gdb 
 #
-# CONFIG_gdb is not set
+CONFIG_gdb=y
 # CONFIG_gdb-dbg is not set
 # CONFIG_gdb-dev is not set
 # CONFIG_gdbserver is not set
@@ -3996,7 +3996,7 @@ CONFIG_imagefeature-ssh-server-dropbear=y
 CONFIG_imagefeature-hwcodecs=y
 # CONFIG_imagefeature-package-management is not set
 CONFIG_imagefeature-debug-tweaks=y
-# CONFIG_auto-login is not set
+CONFIG_auto-login=y
 
 #
 # apps 
@@ -4007,6 +4007,10 @@ CONFIG_imagefeature-debug-tweaks=y
 #
 # user packages 
 #
+CONFIG_libiio=y
+CONFIG_libserialport=y
+CONFIG_libusb=y
+CONFIG_mw-fs-overlay=y
 
 #
 # PetaLinux RootFS Settings
