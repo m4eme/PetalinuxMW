@@ -2,7 +2,6 @@ FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 FILESEXTRAPATHS_prepend := "${THISDIR}/files/mathworks:"
 
 SRC_URI += "file://system-user.dtsi"
-
 SRC_URI += "file://axistream.dtsi"
 SRC_URI += "file://base.dtsi"
 SRC_URI += "file://sharedmem_iio.dtsi"

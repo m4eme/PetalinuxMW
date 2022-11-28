@@ -5,12 +5,12 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 RDEPENDS_${PN} += "u-boot-fw-utils"
 
 EXTRAPATHS_prepend += "${THISDIR}/files/common:"
-EXTRAPATHS_prepend += "${THISDIR}/files/zynqmp:"
+EXTRAPATHS_prepend += "${THISDIR}/files/zynq:"
 
 SRC_URI += "file://common/fs-overlay/usr/sbin/ \
             file://common/fs-overlay/etc/ \
             file://common/fs-overlay/etc/init.d \
-            file://zynqmp/fs-overlay/etc/ \ 
+            file://zynq/fs-overlay/etc/ \ 
 "
 
 
@@ -26,11 +26,11 @@ install -m 0755 ${WORKDIR}/common/fs-overlay/etc/udhcpd.conf ${D}${sysconfdir}/u
  
 
 install -d ${D}/${sysconfdir}/profile.d/
-    cp -r ${WORKDIR}/zynqmp/fs-overlay/etc/profile.d/* ${D}${sysconfdir}/profile.d/
+    cp -r ${WORKDIR}/zynq/fs-overlay/etc/profile.d/* ${D}${sysconfdir}/profile.d/
 
 install -d ${D}/${sysconfdir}/bootvars.d/
     cp -r ${WORKDIR}/common/fs-overlay/etc/bootvars.d/* ${D}${sysconfdir}/bootvars.d/
-    cp -r ${WORKDIR}/zynqmp/fs-overlay/etc/bootvars.d/* ${D}${sysconfdir}/bootvars.d/
+    cp -r ${WORKDIR}/zynq/fs-overlay/etc/bootvars.d/* ${D}${sysconfdir}/bootvars.d/
 
 install -d ${D}/${sysconfdir}/ssh/
     cp -r ${WORKDIR}/common/fs-overlay/etc/ssh/* ${D}${sysconfdir}/ssh/
@@ -81,5 +81,3 @@ FILES_${PN} += "${sysconfdir}/rc2.d/"
 FILES_${PN} += "${sysconfdir}/rc3.d/"
 FILES_${PN} += "${sysconfdir}/rc4.d/"
 FILES_${PN} += "${sysconfdir}/rc5.d/"
-
-

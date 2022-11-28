@@ -1,26 +1,18 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/files/zynqmp/fs-overlay/etc/:"
+FILESEXTRAPATHS_prepend := "${THISDIR}/files/zynq/fs-overlay/etc/:"
 #S = "${WORKDIR}/mw-fs-overlay"
 #S = "${WORKDIR}"
 #
-SRCREV = "0b0c6af38738f2c132cfd41a240889acaa031c8f"
 
-SRC_URI  += "git://git.denx.de/u-boot.git"
-SRC_URI += " file://fw_env.config"
+#SRCREV = "e5aee22e4be75e75a854ab64503fc80598bc2004"
+#SRC_URI = "git://github.com/u-boot/u-boot.git;protocol=https"
 
-# remove patches introduced in older version
-SRC_URI_remove = "file://0001-CVE-2019-13103.patch"
-SRC_URI_remove = "file://0002-CVE-2019-13104.patch"
-SRC_URI_remove = "file://0003-CVE-2019-13105.patch"
-SRC_URI_remove = "file://0004-CVE-2019-13106.patch"
-SRC_URI_remove = "file://0005-CVE-2019-14192-14193-14199.patch"
-SRC_URI_remove = "file://0006-CVE-2019-14197-14200-14201-14202-14203-14204.patch"
-SRC_URI_remove = "file://0007-CVE-2019-14194-14198.patch"
-SRC_URI_remove = "file://0008-CVE-2019-14195.patch"
-SRC_URI_remove = "file://0009-CVE-2019-14196.patch"
+SRCREV = "265d7a7ff8a82792344e8fb5c322e8f00d47e6cc"
+SRC_URI = "git://github.com/Xilinx/u-boot-xlnx;protocol=https"
 
+SRC_URI += "file://fw_env.config"
 
 do_install_append() {
     install -d ${D}${sysconfdir}
-    install -m 0644 ${WORKDIR}/fw_env.config  ${D}${sysconfdir}/fw_env.config
+#    install -m 0644 ${WORKDIR}/fw_env.config  ${D}${sysconfdir}/fw_env.config
 }
 PACKAGE_ARCH = "${MACHINE_ARCH}"
