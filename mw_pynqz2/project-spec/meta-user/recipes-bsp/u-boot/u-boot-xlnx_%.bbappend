@@ -9,6 +9,7 @@ SRC_URI += " file://0003-add-pynqz1-support.patch"
 SRC_URI += " file://0004-add-pynqz2-support.patch"
 SRC_URI += " file://ethernet_spi.cfg"
 SRC_URI += " file://mw.cfg"
+SRC_URI += " file://bsp.cfg"
 
 do_copy_configs () {
  cp ${WORKDIR}/mw_xilinx_common.h ${S}/include/configs/mw_xilinx_common.h
