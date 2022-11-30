@@ -42,7 +42,7 @@ assemble_dtb() {
 
 }
 
-build/tmp/sysroots-components/x86_64/u-boot-mkimage-native/usr/bin/mkimage -A arm64 -T ramdisk -C gzip -d images/linux/rootfs.cpio.gz images/uramdisk.image.gz
+build/tmp/sysroots-components/x86_64/u-boot-tools-native/usr/bin/mkimage -A arm64 -T ramdisk -C gzip -d images/linux/rootfs.cpio.gz images/uramdisk.image.gz
 petalinux-package --boot --fsbl ./images/linux/zynq_fsbl.elf --u-boot -o ./images/BOOT.BIN --force 
 
 src_dir="$(pwd)"
@@ -57,9 +57,9 @@ cp_cmd3="cp $src_dir/images/linux/system.dtb $dst_dir/devicetree.dtb"
 cp_cmd4="cp $src_dir/images/linux/uImage $dst_dir"
 cp_cmd5="cp $src_dir/images/linux/system.bit $dst_dir"
 cp_cmd6="cp $src_dir/mw_build_utils/interfaces $dst_dir"
-cp_cmd6="cp $src_dir/mw_build_utils/hostname $dst_dir"
+cp_cmd7="cp $src_dir/mw_build_utils/hostname $dst_dir"
 
-$mkdir_cmd; $cp_cmd1; $cp_cmd2; $cp_cmd3; $cp_cmd4; $cp_cmd5; $cp_cmd6
+$mkdir_cmd; $cp_cmd1; $cp_cmd2; $cp_cmd3; $cp_cmd4; $cp_cmd5; $cp_cmd6; $cp_cmd7
 
 print_dst=$(echo $dst_dir | sed 's/\//\\/g')
 echo "Copied location: \\$print_dst"
