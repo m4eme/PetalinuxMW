@@ -15,4 +15,5 @@ pre-built/linux
 */*/meta-plnx-generated/*
 */*/*/*/*/subdir.mk
 */*/*/.cproject
+*/hardware/*
 
