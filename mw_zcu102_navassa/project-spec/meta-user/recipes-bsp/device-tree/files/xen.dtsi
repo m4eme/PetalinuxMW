@@ -25,5 +25,8 @@
 			&fpd_dma_chan8 0x14ef
 			&sdhci0 0x870
 			&sdhci1 0x871
-			&nand0 0x872>;
+			&nand0 0x872
+			&pcie 0x4d0
+			&zynqmp_dpsub 0xce3
+			&zynqmp_dpdma 0xce4>;
 };

@@ -11,6 +11,8 @@
 # III. Software Images								#
 # IV.  Hardware Images								#
 # V.   Software Projects							#
+# VI.  Vitis Platform tcl							#
+# VII. Booting Prebuilt Images							#
 #################################################################################
 
 I. Main Contents of Prebuilt
@@ -25,7 +27,7 @@ I. Main Contents of Prebuilt
 | | | |-- Image				# FIT image including the kernel
 | | | |-- u-boot.elf			# U-boot ELF
 | | | |-- u-boot.bin                    # U-boot bin
-| | | |-- petalinux-sdimage.wic 	# wic image for SD card with BOOT and ROOT partitions with required files
+| | | |-- petalinux-sdimage.wic.xz	# Compressed wic image for SD card with BOOT and ROOT partitions with required files
 | | | |-- BOOT.BIN			# ZynqMP boot BIN file
 | | | |-- boot.scr			# boot.scr to provide the required default boot
 | | | |-- pxelinux.cfg			# pxelinux.cfg directory with default configuration file for pxe boot
@@ -36,6 +38,10 @@ I. Main Contents of Prebuilt
 | | | |-- rootfs.tar.gz			# Rootfs tar file which can be used for SD ext4 partition
 | | | |-- rootfs.jffs2			# Rootfs jffs2 file which can be used for mounting rootfs on jffs2 file system
 | | | |-- rootfs.manifest		# Rootfs manifest file will have list of packages and version details
+| | | |-- ramdisk.cpio.gz		# Ramdisk rootfs CPIO image
+| | | |-- ramdisk.cpio.gz.u-boot	# Ramdisk rootfs CPIO image with u-boot header for loading from u-boot
+| | | |-- ramdisk.tar.gz		# Ramdisk rootfs CPIO image with gz compression
+| | | |-- ramdisk.manifest		# Ramdisk manifest file will have list of packages and version details
 | | | |-- pmu_rom_qemu_sha3.elf		# Pre-built pmu-rom ELF need for qemu boot(mandatory for both template and bsp projects
 | | | |                                     # Note: pmu_rom_qemu_sha3.elf is never generated from petalinux build,
 | | | |                                     # this needs to be copied from BSP project
@@ -45,6 +51,7 @@ I. Main Contents of Prebuilt
 | | | |-- zynqmp-qemu-arm.dtb           # qemu device-tree blob file for single arch
 | | | |-- zynqmp-qemu-multiarch-arm.dtb # qemu device-tree blob file for multi arch and it has information of a53 and other devices
 | | | |-- zynqmp-qemu-multiarch-pmu.dtb # qemu device-tree blob file for multi arch and it has information of microblaze nodes
+| | | |-- pl.dtbo			# PL device-tree overlay blob file
 | | |-- xen
 | | | |-- xen.dtb			# Xen device-tree blob file
 | | | |-- xen-Image			# Xen kernel image
@@ -75,7 +82,7 @@ Note:	While building bsps, we use some openAMP, Xen and QEMU files from internal
 
 	II.b Get openamp,qemu and xen device trees
 
-		$ cp -r <any-zynqMP-BSP>/project-spec/meta-user/recipes-bsp/device-tree/files/{openamp.dtsi,xen.dtsi,zynqmp-qemu-arm.dts,multi-arch/} <project root>/project-spec/meta-user/recipes-bsp/device-tree/files
+		$ cp -r <any-zynqMP-BSP>/project-spec/meta-user/recipes-bsp/device-tree/files/{openamp.dtsi,xen.dtsi} <project root>/project-spec/meta-user/recipes-bsp/device-tree/files
 
 		$ echo '/include/ "openamp.dtsi"' >>  <project root>/project-spec/meta-user/recipes-bsp/device-tree/files/system-user.dtsi
 
@@ -97,16 +104,21 @@ Note:	While building bsps, we use some openAMP, Xen and QEMU files from internal
 		4. zcu111 board
 		5. zcu1275 and zc1285 boards
 		6. zcu216 and zcu208 boards
+		7. zcu670 board
 		Choose any desired board and follow steps in it.
 
 		1.zcu102 rev1.0 board
 			$ petalinux-config
-				Enter zcu102-rev1.0 for MACHINE_NAME option ( ZCU102 DTG board parameter for rev1.0)
+				Enter zcu102 for YOCTO_BOARD_NAME option ( ZCU102 DTG board parameter for rev1.0)
 				Enter zynqmp-generic for YOCTO_MACHINE_NAME option
 			$ petalinux-config -c rootfs
 				Select following packages and save it
 					libmali-xlnx
 					package-management
+					zocl
+					xrt
+					opencl-clhpp
+					opencl-headers
 
 		2. zcu104 boards
 			$ echo 'CONFIG_gstreamer-vcu-examples' >> <project root>/project-spec/meta-user/conf/user-rootfsconfig
@@ -124,9 +136,13 @@ Note:	While building bsps, we use some openAMP, Xen and QEMU files from internal
 					gstreamer-vcu-examples
 					libmali-xlnx
 					package-management
+					zocl
+					xrt
+					opencl-clhpp
+					opencl-hearders
 
 			$ petalinux-config
-				Enter zcu104-revc for MACHINE_NAME option for zcu104 board ( ZCU104 DTG board parameter)
+				Enter zcu104 for YOCTO_BOARD_NAME option for zcu104 board ( ZCU104 DTG board parameter)
 				Enter zynqmp-generic for YOCTO_MACHINE_NAME option for zcu104 board
 
 		NOTE: zcu104/zcu106 - Due to limited flash size, reduce the rootfs size to flash image.ub to qspi.
@@ -136,17 +152,21 @@ Note:	While building bsps, we use some openAMP, Xen and QEMU files from internal
                         $ petalinux-config --silentconfig
                         $ petalinux-config -c rootfs
                                 Select following packages and save it
-					packagegroup-petalinux-gstreamer \
-					packagegroup-petalinux-matchbox \
-					packagegroup-petalinux-x11 \
-					libdrm \
-					libdrm-kms \
-					libdrm-tests \
-					gstreamer-vcu-examples \
-					packagegroup-petalinux-v4lutils \
-					packagegroup-petalinux-audio \
-					board-fpga-autoload \
-					libmali-xlnx \
+					packagegroup-petalinux-gstreamer
+					packagegroup-petalinux-matchbox
+					packagegroup-petalinux-x11
+					libdrm
+					libdrm-kms
+					libdrm-tests
+					gstreamer-vcu-examples
+					packagegroup-petalinux-v4lutils
+					packagegroup-petalinux-audio
+					board-fpga-autoload
+					libmali-xlnx
+					zocl
+					xrt
+					opencl-clhpp
+					opencl-hearders
 		# For zcu106 create xsa dir in proj-spec
 		mkdir project-spec/xsa_dir/
 		cp hardware/xilinx-zcu106-2020.2/outputs/zcu106_1.xsa project-spec/xsa_dir/
@@ -162,7 +182,7 @@ Note:	While building bsps, we use some openAMP, Xen and QEMU files from internal
 
 		$ petalinux-config --silentconfig
 		$ petalinux-config
-			Enter zcu106-reva for MACHINE_NAME option for zcu106 boards (ZCU106 DTG board parameter )
+			Enter zcu106 for  YOCTO_BOARD_NAME option for zcu106 boards (ZCU106 DTG board parameter )
 			Enter zynqmp-generic for YOCTO_MACHINE_NAME option for zcu106 board
 
 		3. ultra96 board
@@ -208,7 +228,7 @@ EOF
 				Select CONFIG_SUBSYSTEM_SERIAL_PSU_UART_1_SELECT
 				Select CONFIG_SUBSYSTEM_ROOTFS_EXT4
 				Enter avnet_ultra96_rev1_defconfig to SUBSYSTEM_UBOOT_CONFIG_TARGET for ultra96 boards
-				Enter avnet-ultra96-rev1 for MACHINE_NAME option  ( Ultra96 DTG board parameter)
+				Enter ultra96 for YOCTO_BOARD_NAME option  ( Ultra96 DTG board parameter)
 				Enter "ultra96-zynqmp" for YOCTO_MACHINE_NAME option.
 			$ petalinux-config -c u-boot
 				Change CONFIG_BOOTDELAY to 2 and then enable below configs and save.
@@ -239,8 +259,8 @@ EOF
 				libsdfecusrintf
 				sdfec-demo
                         $ petalinux-config
-                                Enter zcu111-reva for MACHINE_NAME option  ( ZCU111 DTG board parameter)
-                                Enter "zcu111-zynqmp" for YOCTO_MACHINE_NAME option.
+                                Enter zcu111 for YOCTO_BOARD_NAME option  ( ZCU111 DTG board parameter)
+                                Enter "zynqmp-generic" for YOCTO_MACHINE_NAME option.
 
 		5.zcu1275 and zc1285 boards
 			$ cat >> project-spec/meta-user/conf/user-rootfsconfig << EOF
@@ -256,10 +276,10 @@ EOF
                                 rfdc-read-write
                                 rfdc-selftest
                         $ petalinux-config
-				Enter zc1275-revb for MACHINE_NAME option  ( ZC1275 DTG board parameter)
-				Enter zc1285-reva for MACHINE_NAME option  ( ZC1285 DTG board parameter)
-				Enter zc1275-zynqmp for YOCTO_MACHINE_NAME option for zc1275 board
-				Enter zc1285-zynqmp for YOCTO_MACHINE_NAME option for zc1285 board
+				Enter zc1275 for YOCTO_BOARD_NAME option  ( ZC1275 DTG board parameter)
+				Enter zc1285 for YOCTO_BOARD_NAME option  ( ZC1285 DTG board parameter)
+				Enter zynqmp-generic for YOCTO_MACHINE_NAME option for zc1275 board
+				Enter zynqmp-generic for YOCTO_MACHINE_NAME option for zc1285 board
 
 	$ Optional configurations.
 				If prebuilt kernel image is more than 128M, jtag boot command "petalinux-boot --jtag/--qemu --prebuilt 3 would not work due to overlap between kernel image & linux-boot.elf (bl33 used in jtag mode). So, to overcome this issue, BL33 entry address (U-boot and linux-boot.elf start/load address) is changed to 0x10080000. This is done through:
@@ -285,10 +305,42 @@ EOF
 				rfclk
 				sdfec (only for zcu208 sdfec board)
 			$ petalinux-config
-                                Enter zcu216-reva for MACHINE_NAME option  ( ZCU216 DTG board parameter)
-                                Enter zcu208-reva for MACHINE_NAME option  ( ZCU208 DTG board parameter)
-                                Enter zcu208-zynqmp for YOCTO_MACHINE_NAME option for zcu208 board
-                                Enter zcu216-zynqmp for YOCTO_MACHINE_NAME option for zcu216 board
+                                Enter zcu216 for YOCTO_BOARD_NAME option  ( ZCU216 DTG board parameter)
+                                Enter zcu208 for YOCTO_BOARD_NAME option  ( ZCU208 and zcu208-sdfec  DTG board parameter)
+                                Enter zynqmp-generic for YOCTO_MACHINE_NAME option for zcu208 board
+                                Enter zynqmp-generic for YOCTO_MACHINE_NAME option for zcu216 board
+		7.zcu670
+			$ cat >> project-spec/meta-user/conf/user-rootfsconfig << EOF
+CONFIG_gpio-demo
+CONFIG_peekpoke
+CONFIG_rfdc
+CONFIG_rfdc-read-write
+CONFIG_rfdc-selftest
+CONFIG_rfclk
+CONFIG_python3-pyro4
+CONFIG_python3-cffi
+CONFIG_dfeccf
+CONFIG_dfeequ
+CONFIG_dfemix
+CONFIG_dfeprach
+EOF
+		$ petalinux-config -c rootfs
+			Select following packages and save it
+			rfdc
+			rfdc-read-write
+			rfdc-selftest
+			rfclk
+			python3-pyro4
+			python3-cffi
+			python3
+			libmetal
+			dfeccf
+			dfeequ
+			dfemix
+			dfeprach
+		$ petalinux-config
+			Enter zcu670 for YOCTO_BOARD_NAME option  ( ZCU670 DTG board parameter)
+			Enter zynqmp-generic for YOCTO_MACHINE_NAME option for zcu670 board
 
 	II.e. Project Build
 
@@ -301,11 +353,12 @@ EOF
 
 		2. Build xen images
 			$ echo '/include/ "xen.dtsi"' >> <project root>/project-spec/meta-user/recipes-bsp/device-tree/files/system-user.dtsi
-			$ echo 'SRC_URI += "file://xen.dtsi \"' >> project-spec/meta-user/recipes-bsp/device-tree/device-tree.bbappend
+			$ echo 'SRC_URI += "file://xen.dtsi"' >> project-spec/meta-user/recipes-bsp/device-tree/device-tree.bbappend
 			$ petalinux-config
 				Select following config and save it.
 					Image Packaging Configuration
 						Root filesystem type (INITRD)
+						INITRAMFS/INITRD Image name (petalinux-image-minimal)
 			$ petalinux-config -c rootfs
 				Select following package and save it
 					packagegroup-petalinux-xen
@@ -401,3 +454,19 @@ V. Software Projects
 ================================================================================
  * device-tree
    DTG xsct software components can be found at "components/plnx_workspace/" directory
+
+VI. Vitis Platform tcl (supported for zcu104,zcu102,zcu106)
+================================================================================
+ * Please find the pfm.tcl at <project>/hardware/vitis/pfm.tcl
+   Run this tcl pointing the xsa in bsp
+   EX: xsct -sdx pfm.tcl -xsa <file> -name <name for platform>
+
+   Note: Make sure you have vitis installed before running this command.
+
+   For information on acceleration apps development please refer to Vitis documentation.
+
+
+VII. Booting Prebuilt Images
+=====================================================================================
+   We can boot petalinux images using  petalinux-boot command.
+   For more information on booting prebuilt images please refer the "Booting and Packaging" section of ug1144.

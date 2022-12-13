@@ -2,7 +2,7 @@ FILESEXTRAPATHS_prepend := "${THISDIR}/files/zynq/fs-overlay/etc/:"
 #S = "${WORKDIR}/mw-fs-overlay"
 #S = "${WORKDIR}"
 #SRC_URI += " file://fw_env.config"
-SRC_URI += " file://fstab"
+SRC_URI += "file://fstab"
 
 do_install_append() {
     install -d ${D}${sysconfdir}

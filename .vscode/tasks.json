@@ -1,0 +1,126 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Run Petalinux settings.sh",
+            "type": "shell",
+            "command": "source /opt/Xilinx/Petalinux/settings.sh",
+            "options": {
+                "shell": {
+                    "args": [
+                        "-c",
+                        "-l"
+                    ]
+                }
+            }
+        },
+        {
+            "label": "petalinux navassa build all",
+            "type": "shell",
+            "command": "petalinux-build",
+            "options": {
+                "cwd": "${workspaceFolder}/mw_zcu102_navassa"
+            },
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "petalinux navassa rebuild rootfs",
+            "type": "shell",
+            "command": "source /opt/Xilinx/Petalinux/settings.sh && petalinux-build -c rootfs",
+            "options": {
+                "cwd": "${workspaceFolder}/mw_zcu102_navassa"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "petalinux navassa clean rootfs",
+            "type": "shell",
+            "command": "source /opt/Xilinx/Petalinux/settings.sh && petalinux-build -c rootfs -x distclean",
+            "options": {
+                "cwd": "${workspaceFolder}/mw_zcu102_navassa"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "petalinux navassa rebuild kernel",
+            "type": "shell",
+            "command": "source /opt/Xilinx/Petalinux/settings.sh && petalinux-build -c kernel",
+            "options": {
+                "cwd": "${workspaceFolder}/mw_zcu102_navassa"
+            }
+        },
+        {
+            "label": "petalinux navassa clean kernel",
+            "type": "shell",
+            "command": "source /opt/Xilinx/Petalinux/settings.sh && petalinux-build -c kernel -x distclean",
+            "options": {
+                "cwd": "${workspaceFolder}/mw_zcu102_navassa"
+            }
+        },
+        {
+            "label": "petalinux navassa rebuild u-boot",
+            "type": "shell",
+            "command": "source /opt/Xilinx/Petalinux/settings.sh && petalinux-build -c u-boot",
+            "options": {
+                "cwd": "${workspaceFolder}/mw_zcu102_navassa"
+            }
+        },
+        {
+            "label": "petalinux navassa clean u-boot",
+            "type": "shell",
+            "command": "source /opt/Xilinx/Petalinux/settings.sh && petalinux-build -c u-boot -x distclean",
+            "options": {
+                "cwd": "${workspaceFolder}/mw_zcu102_navassa"
+            }
+        },
+        {
+            "label": "petalinux navassa mr proper",
+            "type": "shell",
+            "command": "source /opt/Xilinx/Petalinux/settings.sh && petalinux-build -x mrproper",
+            "options": {
+                "cwd": "${workspaceFolder}/mw_zcu102_navassa"
+            }
+        },
+        {
+            "label": "petalinux navassa config",
+            "type": "shell",
+            "command": "source /opt/Xilinx/Petalinux/settings.sh && petalinux-config",
+            "options": {
+                "cwd": "${workspaceFolder}/mw_zcu102_navassa"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "petalinux navassa rootfs config",
+            "type": "shell",
+            "command": "source /opt/Xilinx/Petalinux/settings.sh && petalinux-config -c rootfs",
+            "options": {
+                "cwd": "${workspaceFolder}/mw_zcu102_navassa"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Navassa MW Package",
+            "type": "shell",
+            "command": "./mw_package_binaries.sh",
+            "options": {
+                "cwd": "${workspaceFolder}/mw_zcu102_navassa"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Navassa MW Package and Copy to C:",
+            "type": "shell",
+            "command": "./mw_package_binaries.sh /mnt/c/projects/RMI/P12736/test/sdcard",
+            "options": {
+                "cwd": "${workspaceFolder}/mw_zcu102_navassa"
+            },
+            "problemMatcher": []
+        }]
+}
