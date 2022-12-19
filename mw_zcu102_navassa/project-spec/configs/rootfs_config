@@ -4176,6 +4176,10 @@ CONFIG_auto-login=y
 #
 # user packages 
 #
+CONFIG_libiio=y
+CONFIG_libserialport=y
+CONFIG_libusb=y
+CONFIG_mw-fs-overlay=y
 
 #
 # PetaLinux RootFS Settings
