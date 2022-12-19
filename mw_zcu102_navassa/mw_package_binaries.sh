@@ -48,8 +48,7 @@ assemble_dtb() {
     fi
 
 }
-
-build/tmp/sysroots-components/x86_64/u-boot-tools-native/usr/bin/mkimage -A arm64 -T ramdisk -C gzip -d images/linux/rootfs.cpio.gz images/uramdisk.image.gz
+env LD_LIBRARY_PATH=./build/tmp/sysroots-components/x86_64/openssl-native/usr/lib:/lib ./build/tmp/sysroots-components/x86_64/u-boot-mkimage-native/usr/bin/mkimage -A arm64 -T ramdisk -C gzip -d images/linux/rootfs.cpio.gz images/uramdisk.image.gz
 petalinux-package --boot --fsbl ./images/linux/zynqmp_fsbl.elf --u-boot -o ./images/BOOT.BIN --force 
 
 src_dir="$(pwd)"
@@ -84,7 +83,7 @@ echo "Copied location: \\$print_dst"
 
 # Create .zip file
 get_timestamp_sd=$(timestamp_sdcard)
-zip zcu102_navassa_sdcard_zynqmp_$get_timestamp_sd.zip -j $dst_dir/*
+zip zcu102_adi_sdcard_zynqmp_$get_timestamp_sd.zip -j $dst_dir/*
 echo "Copying to target dir ${sdcarddir}"
 
 if [[ ! -z "$sdcarddir" ]]; then
