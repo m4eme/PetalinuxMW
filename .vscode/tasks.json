@@ -6,7 +6,7 @@
         {
             "label": "Run Petalinux settings.sh",
             "type": "shell",
-            "command": "source /opt/Xilinx/Petalinux/settings.sh",
+            "command": "source /opt/Xilinx/Petalinux/2019.1/settings.sh",
             "options": {
                 "shell": {
                     "args": [
@@ -14,6 +14,20 @@
                         "-l"
                     ]
                 }
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "petalinux adi_zcu102 build all",
+            "type": "shell",
+            "command": "petalinux-build",
+            "options": {
+                "cwd": "${workspaceFolder}/adi_zcu102"
+            },
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
             }
         },
         {
@@ -122,5 +136,18 @@
                 "cwd": "${workspaceFolder}/mw_zcu102_navassa"
             },
             "problemMatcher": []
-        }]
+        },
+        {
+            "label": "WSL ADI ZCU102 rsync to C:",
+            "type": "shell",
+            "command": "rsync -va ~/projects/PetalinuxMW/adi_zcu102/images/linux/* /mnt/c/projects/RMI/P12736/test/sdcard/WSL",
+            "problemMatcher": []
+        },
+        {
+            "label": "Kubuntu TS ADI ZCU102 rsync to C:",
+            "type": "shell",
+            "command": "rsync -va mmate@mariano-lab2204-ts:/projects/PetalinuxMW/adi_zcu102/images/linux/* /mnt/c/projects/RMI/P12736/test/sdcard/Linux",
+            "problemMatcher": []
+        }
+    ]
 }
