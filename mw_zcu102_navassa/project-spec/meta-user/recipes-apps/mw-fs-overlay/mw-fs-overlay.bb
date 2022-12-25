@@ -10,7 +10,6 @@ EXTRAPATHS_prepend += "${THISDIR}/files/zynqmp:"
 SRC_URI += "file://common/fs-overlay/etc/ \
             file://common/fs-overlay/etc/init.d/ \
 	    file://common/fs-overlay/etc/udev/rules.d/ \
-	    file://common/fs-overlay/etc/ssh/ \
 	    file://common/fs-overlay/usr/sbin/ \
 	    file://zynqmp/fs-overlay/etc/ \ 
 	    file://zynqmp/fs-overlay/etc/profile.d/ \
@@ -61,19 +60,11 @@ install -d ${D}${sysconfdir}/rc5.d
 	update-rc.d -r ${D} sdinit start 99 1 2 3 4 5 .
 
 
-install -d ${D}/${sysconfdir}/ssh/
-	cp -r ${WORKDIR}/common/fs-overlay/etc/ssh/* ${D}${sysconfdir}/ssh/
-
-
 install -d ${D}/${sbindir}/
 	cp -r ${WORKDIR}/common/fs-overlay/usr/sbin/* ${D}${sbindir}
 
 install -d ${D}/${sysconfdir}/udev/rules.d/
         cp -r ${WORKDIR}/common/fs-overlay/etc/udev/rules.d/*  ${D}${sysconfdir}/udev/rules.d/
-
-#create symlinks for ssh
-install -d ${D}${bindir}
-       # ln -sf  ../bin/mw_setboot ${D}${sbindir}/mw_setboot
 
 }
 
@@ -89,7 +80,6 @@ FILES_${PN} += "${sysconfdir}/bootvars.d/"
 FILES_${PN} += "${sysconfdir}/init.d/"
 FILES_${PN} += "${sysconfdir}/udev/rules.d/"
 FILES_${PN} += "${sysconfdir}/profile.d/"
-FILES_${PN} += "${sysconfdir}/ssh/"
 FILES_${PN} += "${sysconfdir}/rcS.d/"
 FILES_${PN} += "${sysconfdir}/rc1.d/"
 FILES_${PN} += "${sysconfdir}/rc2.d/"

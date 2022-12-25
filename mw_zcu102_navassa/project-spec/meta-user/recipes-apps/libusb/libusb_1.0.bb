@@ -1,4 +1,4 @@
-DISCRIPTION = "Userspace library for accessing USB devices"
+DESCRIPTION = "Userspace library for accessing USB devices"
 SECTION = "libs"
 LICENSE = "LGPL-2.1+"
 HOMEPAGE = "http://libusb.info/"

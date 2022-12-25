@@ -1,3 +1,9 @@
-/include/ "system-conf.dtsi"
-/ {
+
+/{
+    fpga_axi {
+        mwipcore0: mwipcore@9D000000 {
+            compatible = "mathworks,mwipcore-v3.00";
+            reg = <0xA0000000 0x10000>;
+        };
+    };
 };
